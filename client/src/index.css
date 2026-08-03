@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-light: #F8FAFC;
+  --color-card-light: #FFFFFF;
+  --color-primary: #2563EB;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-text-light: #111827;
+  --color-muted: #6B7280;
+
+  --color-bg-dark: #0F172A;
+  --color-card-dark: #1E293B;
+  --color-accent-dark: #3B82F6;
+  --color-text-dark: #FFFFFF;
+}
+
+html {
+  transition: background-color 0.2s ease;
+}
+
+body {
+  @apply bg-[var(--color-bg-light)] text-[var(--color-text-light)];
+}
+
+.dark body {
+  @apply bg-[var(--color-bg-dark)] text-[var(--color-text-dark)];
+}
