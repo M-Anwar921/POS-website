@@ -9,6 +9,10 @@ import { Server } from "socket.io";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
+import productRoutes from "./routes/productRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -30,7 +34,10 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });
 app.use("/api", limiter);
 
 app.use("/api/auth", authRoutes);
-
+app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/customers", customerRoutes);
+app.use("/api/orders", orderRoutes);
 app.get("/api/health", (req, res) => res.json({ success: true, message: "API is running" }));
 
 io.on("connection", (socket) => {

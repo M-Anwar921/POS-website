@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import POS from "./pages/POS";
 
 // Placeholder pages — Phase 3-5 will replace these
 const Placeholder = ({ title }) => (
@@ -26,7 +27,7 @@ export default function App() {
           }
         >
           <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
-          <Route path="/pos" element={<Placeholder title="POS Sales Screen" />} />
+          <Route path="/pos" element={<POS />} />
           <Route path="/products" element={<Placeholder title="Products" />} />
           <Route path="/inventory" element={<Placeholder title="Inventory" />} />
           <Route path="/categories" element={<Placeholder title="Categories" />} />
