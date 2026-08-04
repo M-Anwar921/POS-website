@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   FiGrid, FiShoppingCart, FiBox, FiLayers, FiTag, FiUsers, FiTruck,
   FiShoppingBag, FiClipboard, FiRotateCcw, FiDollarSign, FiBarChart2,
-  FiUserCheck, FiSettings, FiLogOut,
+  FiUserCheck, FiSettings, FiLogOut, FiX,
 } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
@@ -25,7 +26,7 @@ const navItems = [
   { to: "/settings", label: "Settings", icon: FiSettings },
 ];
 
-export default function Sidebar() {
+function SidebarContent({ onNavigate }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 bg-white dark:bg-[var(--color-card-dark)] border-r border-gray-100 dark:border-gray-800">
+    <>
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="w-9 h-9 rounded-lg bg-[var(--color-primary)] flex items-center justify-center text-white font-bold">P</div>
         <span className="font-semibold text-lg dark:text-white">POS Admin</span>
@@ -46,6 +47,7 @@ export default function Sidebar() {
           <NavLink
             key={to}
             to={to}
+            onClick={onNavigate}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 isActive
@@ -69,6 +71,49 @@ export default function Sidebar() {
           Logout
         </button>
       </div>
+    </>
+  );
+}
+
+// Desktop / tablet-landscape: static sidebar
+export default function Sidebar() {
+  return (
+    <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 bg-white dark:bg-[var(--color-card-dark)] border-r border-gray-100 dark:border-gray-800">
+      <SidebarContent />
     </aside>
+  );
+}
+
+// Mobile / tablet-portrait: slide-in drawer, controlled from Topbar
+export function MobileSidebar({ isOpen, onClose }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          />
+          <motion.aside
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "tween", duration: 0.25 }}
+            className="fixed top-0 left-0 h-screen w-64 flex flex-col bg-white dark:bg-[var(--color-card-dark)] z-50 lg:hidden"
+          >
+            <button
+              onClick={onClose}
+              className="absolute top-5 right-4 p-1.5 rounded-full bg-gray-100 dark:bg-gray-800"
+            >
+              <FiX />
+            </button>
+            <SidebarContent onNavigate={onClose} />
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
