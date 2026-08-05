@@ -20,4 +20,4 @@ export const createCustomer = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};s
+};
