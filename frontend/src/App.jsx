@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import POS from "./pages/POS";
+import Products from "./pages/Products";
+import Categories from "./pages/Categories";
 
 // Placeholder pages — Phase 3-5 will replace these
 const Placeholder = ({ title }) => (
@@ -28,9 +30,9 @@ export default function App() {
         >
           <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
           <Route path="/pos" element={<POS />} />
-          <Route path="/products" element={<Placeholder title="Products" />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/inventory" element={<Placeholder title="Inventory" />} />
-          <Route path="/categories" element={<Placeholder title="Categories" />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/customers" element={<Placeholder title="Customers" />} />
           <Route path="/suppliers" element={<Placeholder title="Suppliers" />} />
           <Route path="/purchases" element={<Placeholder title="Purchases" />} />
