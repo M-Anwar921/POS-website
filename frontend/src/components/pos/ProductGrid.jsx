@@ -3,6 +3,7 @@ import { FiSearch, FiCamera } from "react-icons/fi";
 import api from "../../api/axios";
 import ProductCard from "./ProductCard";
 import toast from "react-hot-toast";
+import ProductDetailModal from "./ProductDetailModal";
 
 export default function ProductGrid({ onAddToCart }) {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,7 @@ export default function ProductGrid({ onAddToCart }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -96,11 +98,18 @@ export default function ProductGrid({ onAddToCart }) {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 group">
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} onAdd={onAddToCart} />
+              <ProductCard key={product._id} product={product} onAdd={onAddToCart} onViewDetails={setSelectedProduct} />
             ))}
           </div>
         )}
       </div>
+      {selectedProduct && (
+  <ProductDetailModal
+    product={selectedProduct}
+    onClose={() => setSelectedProduct(null)}
+    onAdd={onAddToCart}
+  />
+)}
     </div>
   );
 }
