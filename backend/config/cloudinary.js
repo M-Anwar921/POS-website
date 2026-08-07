@@ -21,6 +21,8 @@ export const uploadBufferToCloudinary = (buffer) => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "pos_products",
+        allowed_formats: ["jpg", "jpeg", "png", "webp"],
+     transformation: [{ width: 800, height: 800, crop: "limit" }],
       },
       (error, result) => {
         if (error) reject(error);
