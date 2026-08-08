@@ -6,8 +6,9 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import POS from "./pages/POS";
 import Products from "./pages/Products";
 import Categories from "./pages/Categories";
+import Inventory from "./pages/Inventory";
+import Suppliers from "./pages/Suppliers";
 
-// Placeholder pages — Phase 3-5 will replace these
 const Placeholder = ({ title }) => (
   <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-8 shadow-sm">
     <h1 className="text-xl font-semibold dark:text-white">{title}</h1>
@@ -31,10 +32,10 @@ export default function App() {
           <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
           <Route path="/pos" element={<POS />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/inventory" element={<Placeholder title="Inventory" />} />
+          <Route path="/inventory" element={<Inventory />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/customers" element={<Placeholder title="Customers" />} />
-          <Route path="/suppliers" element={<Placeholder title="Suppliers" />} />
+          <Route path="/suppliers" element={<Suppliers />} />
           <Route path="/purchases" element={<Placeholder title="Purchases" />} />
           <Route path="/orders" element={<Placeholder title="Orders" />} />
           <Route path="/returns" element={<Placeholder title="Returns" />} />
