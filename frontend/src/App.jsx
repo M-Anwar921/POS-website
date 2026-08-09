@@ -39,9 +39,6 @@ export default function App() {
           <Route path="/categories" element={<Categories />} />
           <Route path="/customers" element={<Placeholder title="Customers" />} />
           <Route path="/suppliers" element={<Suppliers />} />
-          <Route path="/purchases" element={<Placeholder title="Purchases" />} />
-          <Route path="/orders" element={<Placeholder title="Orders" />} />
-          <Route path="/returns" element={<Placeholder title="Returns" />} />
           <Route path="/expenses" element={<Placeholder title="Expenses" />} />
           <Route path="/reports" element={<Placeholder title="Reports" />} />
           <Route path="/employees" element={<Placeholder title="Employees" />} />
