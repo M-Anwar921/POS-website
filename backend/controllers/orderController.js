@@ -181,7 +181,9 @@ export const getOrders = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // @route GET /api/orders/:id
+};
+
+// @route GET /api/orders/:id
 export const getOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id)
@@ -211,5 +213,4 @@ export const updateOrderStatus = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
 };
