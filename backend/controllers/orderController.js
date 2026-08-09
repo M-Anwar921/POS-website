@@ -181,4 +181,35 @@ export const getOrders = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+  // @route GET /api/orders/:id
+export const getOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate("customer", "name phone")
+      .populate("cashier", "name")
+      .populate("statusHistory.changedBy", "name");
+    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    res.json({ success: true, data: order });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route PUT /api/orders/:id/status
+// body: { status, note }
+export const updateOrderStatus = async (req, res, next) => {
+  try {
+    const { status, note = "" } = req.body;
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+
+    order.status = status;
+    order.statusHistory.push({ status, note, changedBy: req.user._id });
+    await order.save();
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    next(error);
+  }
+};
 };

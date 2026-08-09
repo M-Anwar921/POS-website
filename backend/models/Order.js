@@ -34,9 +34,17 @@ const orderSchema = new mongoose.Schema(
     changeDue: { type: Number, default: 0 },
     status: {
       type: String,
-      enum: ["held", "completed", "cancelled", "refunded"],
+      enum: ["held", "pending", "completed", "cancelled", "refunded", "partially_refunded"],
       default: "completed",
     },
+    statusHistory: [
+      {
+        status: String,
+        note: String,
+        changedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        timestamp: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
