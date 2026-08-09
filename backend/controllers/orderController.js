@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+import ProductStock from "../models/ProductStock.js";
+import StockMovement from "../models/StockMovement.js";
+import Warehouse from "../models/Warehouse.js";
+import { syncProductTotal } from "../utils/stockSync.js";
 
 const generateOrderNumber = async () => {
   const count = await Order.countDocuments();
@@ -33,22 +37,48 @@ export const createOrder = async (req, res, next) => {
       throw new Error("Order must contain at least one item");
     }
 
-    // Validate stock and lock in prices from DB (not client-supplied)
+    // POS always sells from the default warehouse for now (matches single point-of-sale checkout)
+    const defaultWarehouse = await Warehouse.findOne({ isDefault: true }).session(session);
+    if (!defaultWarehouse) throw new Error("No default warehouse configured");
+
     const productDocs = await Product.find({ _id: { $in: items.map((i) => i.product) } }).session(session);
     const productMap = new Map(productDocs.map((p) => [p._id.toString(), p]));
 
-    const orderItems = items.map((i) => {
+    const orderItems = [];
+
+    for (const i of items) {
       const product = productMap.get(i.product);
       if (!product) throw new Error(`Product not found: ${i.product}`);
-      if (product.stock < i.quantity) throw new Error(`Insufficient stock for ${product.name}`);
-      return {
+
+      const stockDoc = await ProductStock.findOne({ product: product._id, warehouse: defaultWarehouse._id }).session(session);
+      const available = stockDoc?.quantity || 0;
+      if (available < i.quantity) throw new Error(`Insufficient stock for ${product.name}`);
+
+      stockDoc.quantity -= i.quantity;
+      await stockDoc.save({ session });
+
+      await StockMovement.create(
+        [{
+          product: product._id,
+          warehouse: defaultWarehouse._id,
+          type: "sale",
+          quantity: i.quantity,
+          reason: "POS sale",
+          performedBy: req.user._id,
+        }],
+        { session }
+      );
+
+      await syncProductTotal(product._id, session);
+
+      orderItems.push({
         product: product._id,
         name: product.name,
         price: product.price,
         quantity: i.quantity,
         lineTotal: product.price * i.quantity,
-      };
-    });
+      });
+    }
 
     const { subtotal, discountAmount, taxAmount, grandTotal } = calculateTotals(
       orderItems, discountType, discountValue, taxPercent
@@ -69,11 +99,6 @@ export const createOrder = async (req, res, next) => {
       }],
       { session }
     );
-
-    // Reduce stock
-    for (const item of orderItems) {
-      await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } }, { session });
-    }
 
     await session.commitTransaction();
 
@@ -129,7 +154,7 @@ export const getHeldOrders = async (req, res, next) => {
   }
 };
 
-// @route DELETE /api/orders/held/:id  (resume: client re-adds items to cart, then deletes hold)
+// @route DELETE /api/orders/held/:id
 export const deleteHeldOrder = async (req, res, next) => {
   try {
     await Order.findOneAndDelete({ _id: req.params.id, status: "held" });

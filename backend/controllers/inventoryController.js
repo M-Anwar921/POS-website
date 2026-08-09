@@ -3,16 +3,8 @@ import ProductStock from "../models/ProductStock.js";
 import StockMovement from "../models/StockMovement.js";
 import Product from "../models/Product.js";
 import Warehouse from "../models/Warehouse.js";
+import { syncProductTotal } from "../utils/stockSync.js";
 
-const syncProductTotal = async (productId, session) => {
-  const rows = await ProductStock.aggregate([
-    { $match: { product: new mongoose.Types.ObjectId(productId) } },
-    { $group: { _id: "$product", total: { $sum: "$quantity" } } },
-  ]).session(session);
-  const total = rows[0]?.total || 0;
-  await Product.findByIdAndUpdate(productId, { stock: total }, { session });
-  return total;
-};
 
 // @route GET /api/inventory/overview  -> per-product, per-warehouse stock table
 export const getStockOverview = async (req, res, next) => {
