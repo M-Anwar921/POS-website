@@ -16,6 +16,8 @@ import orderRoutes from "./routes/orderRoutes.js";
 import warehouseRoutes from "./routes/warehouseRoutes.js";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
 import supplierRoutes from "./routes/supplierRoutes.js";
+import purchaseRoutes from "./routes/purchaseRoutes.js";
+import returnRoutes from "./routes/returnRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -45,6 +47,8 @@ app.get("/api/health", (req, res) => res.json({ success: true, message: "API is 
 app.use("/api/warehouses", warehouseRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/suppliers", supplierRoutes);
+app.use("/api/purchases", purchaseRoutes);
+app.use("/api/returns", returnRoutes);
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
