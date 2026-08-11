@@ -13,6 +13,7 @@ import Orders from "./pages/Orders";
 import Returns from "./pages/Returns";
 import Customers from "./pages/Customers";
 import Expenses from "./pages/Expenses";
+import Employees from "./pages/Employees";
 
 const Placeholder = ({ title }) => (
   <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-8 shadow-sm">
@@ -43,7 +44,7 @@ export default function App() {
           <Route path="/suppliers" element={<Suppliers />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/reports" element={<Placeholder title="Reports" />} />
-          <Route path="/employees" element={<Placeholder title="Employees" />} />
+          <Route path="/employees" element={<Employees />} />
           <Route path="/settings" element={<Placeholder title="Settings" />} />
           <Route path="/purchases" element={<Purchases />} />
           <Route path="/orders" element={<Orders />} />
