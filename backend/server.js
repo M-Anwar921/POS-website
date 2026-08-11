@@ -19,6 +19,11 @@ import supplierRoutes from "./routes/supplierRoutes.js";
 import purchaseRoutes from "./routes/purchaseRoutes.js";
 import returnRoutes from "./routes/returnRoutes.js";
 import expenseRoutes from "./routes/expenseRoutes.js";
+import employeeRoutes from "./routes/employeeRoutes.js";
+import attendanceRoutes from "./routes/attendanceRoutes.js";
+import shiftRoutes from "./routes/shiftRoutes.js";
+import salaryRoutes from "./routes/salaryRoutes.js";
+import activityLogRoutes from "./routes/activityLogRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -51,6 +56,11 @@ app.use("/api/suppliers", supplierRoutes);
 app.use("/api/purchases", purchaseRoutes);
 app.use("/api/returns", returnRoutes);
 app.use("/api/expenses", expenseRoutes);
+app.use("/api/employees", employeeRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/shifts", shiftRoutes);
+app.use("/api/salary", salaryRoutes);
+app.use("/api/activity-logs", activityLogRoutes);
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
