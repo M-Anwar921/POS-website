@@ -1,0 +1,9 @@
+import express from "express";
+import { getActivityLogs } from "../controllers/activityLogController.js";
+import { protect, authorize } from "../middleware/auth.js";
+
+const router = express.Router();
+
+router.get("/", protect, authorize("admin", "manager"), getActivityLogs);
+
+export default router;
