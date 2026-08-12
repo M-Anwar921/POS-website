@@ -24,6 +24,10 @@ import attendanceRoutes from "./routes/attendanceRoutes.js";
 import shiftRoutes from "./routes/shiftRoutes.js";
 import salaryRoutes from "./routes/salaryRoutes.js";
 import activityLogRoutes from "./routes/activityLogRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -61,6 +65,10 @@ app.use("/api/attendance", attendanceRoutes);
 app.use("/api/shifts", shiftRoutes);
 app.use("/api/salary", salaryRoutes);
 app.use("/api/activity-logs", activityLogRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/search", searchRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
