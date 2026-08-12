@@ -14,6 +14,8 @@ import Returns from "./pages/Returns";
 import Customers from "./pages/Customers";
 import Expenses from "./pages/Expenses";
 import Employees from "./pages/Employees";
+import Dashboard from "./pages/Dashboard";
+import Reports from "./pages/Reports";
 
 const Placeholder = ({ title }) => (
   <div className="bg-white dark:bg-[var(--color-card-dark)] rounded-2xl p-8 shadow-sm">
@@ -49,6 +51,8 @@ export default function App() {
           <Route path="/purchases" element={<Purchases />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/returns" element={<Returns />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/reports" element={<Reports />} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

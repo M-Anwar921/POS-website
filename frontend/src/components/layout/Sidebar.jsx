@@ -8,6 +8,7 @@ import {
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: FiGrid },
@@ -21,13 +22,15 @@ const navItems = [
   { to: "/orders", label: "Orders", icon: FiClipboard },
   { to: "/returns", label: "Returns", icon: FiRotateCcw },
   { to: "/expenses", label: "Expenses", icon: FiDollarSign },
-  { to: "/reports", label: "Reports", icon: FiBarChart2 },
-  { to: "/employees", label: "Employees", icon: FiUserCheck },
-  { to: "/settings", label: "Settings", icon: FiSettings },
+  { to: "/reports", label: "Reports", icon: FiBarChart2, roles: ["admin", "manager", "accountant"] },
+  { to: "/employees", label: "Employees", icon: FiUserCheck, roles: ["admin", "manager"] },
+  { to: "/settings", label: "Settings", icon: FiSettings, roles: ["admin"] },
 ];
 
 function SidebarContent({ onNavigate }) {
   const dispatch = useDispatch();
+  const { user } = useSelector((s) => s.auth);
+  const visibleItems = navItems.filter((item) => !item.roles || item.roles.includes(user?.role));
   const navigate = useNavigate();
 
   const handleLogout = () => {
