@@ -5,6 +5,7 @@ import ProductStock from "../models/ProductStock.js";
 import StockMovement from "../models/StockMovement.js";
 import Warehouse from "../models/Warehouse.js";
 import { syncProductTotal } from "../utils/stockSync.js";
+import { notify } from "../utils/notify.js";
 
 const generateOrderNumber = async () => {
   const count = await Order.countDocuments();
@@ -105,6 +106,8 @@ export const createOrder = async (req, res, next) => {
     const io = req.app.get("io");
     io.emit("stock:updated");
     io.emit("order:created", order[0]);
+
+    await notify(io, { type: "new_order", title: "New Order", message: `${order[0].orderNumber} — Rs ${order[0].grandTotal.toFixed(0)}`, link: "/orders" });
 
     res.status(201).json({ success: true, data: order[0] });
   } catch (error) {
