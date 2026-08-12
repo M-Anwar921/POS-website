@@ -1,5 +1,6 @@
 import Customer from "../models/Customer.js";
 import Order from "../models/Order.js";
+import { notify } from "../utils/notify.js";
 
 export const getCustomers = async (req, res, next) => {
   try {
@@ -37,6 +38,7 @@ export const getCustomer = async (req, res, next) => {
 export const createCustomer = async (req, res, next) => {
   try {
     const customer = await Customer.create(req.body);
+    await notify(req.app.get("io"), { type: "new_customer", title: "New Customer", message: `${customer.name} was added`, link: "/customers" });
     res.status(201).json({ success: true, data: customer });
   } catch (error) {
     next(error);

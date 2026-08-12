@@ -4,7 +4,7 @@ import StockMovement from "../models/StockMovement.js";
 import Product from "../models/Product.js";
 import Warehouse from "../models/Warehouse.js";
 import { syncProductTotal } from "../utils/stockSync.js";
-
+import { notify } from "../utils/notify.js";
 
 // @route GET /api/inventory/overview  -> per-product, per-warehouse stock table
 export const getStockOverview = async (req, res, next) => {
@@ -89,7 +89,10 @@ export const adjustStock = async (req, res, next) => {
 
     const io = req.app.get("io");
     io.emit("stock:updated");
-    if (newTotal <= 5) io.emit("stock:low", { product });
+    if (newTotal <= 5) {
+  const productDoc = await Product.findById(product);
+  await notify(io, { type: "low_stock", title: "Low Stock Alert", message: `${productDoc.name} is running low (${newTotal} left)`, link: "/inventory" });
+}
 
     res.json({ success: true, data: stockDoc });
   } catch (error) {
