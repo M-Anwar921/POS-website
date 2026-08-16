@@ -1,8 +1,16 @@
 import { motion } from "framer-motion";
 import { FiX, FiPrinter } from "react-icons/fi";
 import Barcode from "react-barcode";
+import { useEffect, useState } from "react";
+import api from "../../api/axios";
 
 export default function ReceiptModal({ order, onClose, onNewSale }) {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    api.get("/settings").then((res) => setSettings(res.data.data));
+  }, []);
+
   const handlePrint = () => window.print();
 
   return (
@@ -19,9 +27,9 @@ export default function ReceiptModal({ order, onClose, onNewSale }) {
 
         <div id="receipt-print" className="p-6 font-mono text-xs text-gray-900">
           <div className="text-center mb-3">
-            <p className="text-base font-bold">YOUR STORE NAME</p>
-            <p>123 Main Street, Lahore</p>
-            <p>Tel: 0300-1234567</p>
+           <p className="text-base font-bold">{settings?.storeName || "Your Store"}</p>
+           <p>{settings?.storeAddress || ""}</p>
+           <p>{settings?.storePhone ? `Tel: ${settings.storePhone}` : ""}</p>
           </div>
           <div className="border-t border-dashed border-gray-400 my-2" />
           <div className="flex justify-between"><span>Order #</span><span>{order.orderNumber}</span></div>
@@ -51,8 +59,8 @@ export default function ReceiptModal({ order, onClose, onNewSale }) {
           <div className="flex flex-col items-center mt-4">
             <Barcode value={order.orderNumber} height={40} width={1.3} fontSize={11} />
           </div>
-          <p className="text-center mt-3">Thank you for shopping with us!</p>
-          <p className="text-center text-gray-500">Returns accepted within 7 days with receipt.</p>
+          <p className="text-center mt-3">{settings?.receiptFooter || "Thank you for shopping with us!"}</p>
+          <p className="text-center text-gray-500">{settings?.returnPolicyText || ""}</p>
         </div>
 
         <div className="flex gap-2 p-4 border-t print:hidden">
